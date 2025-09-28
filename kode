@@ -1,0 +1,157 @@
+import maskpass
+import sys
+from prettytable import PrettyTable
+
+users = {
+    'staff': {'password': '123', 'role': 'staff'},
+    'member': {'password': '321', 'role': 'member'}
+}
+members = {}
+logged_in_user = None
+
+def generate_id():
+    """Membuat ID baru untuk member, dimulai dari 101."""
+    return (max(members.keys()) + 1) if members else 101
+
+def display_members(data_members=members):
+    """Menampilkan data member dalam format tabel."""
+    if not data_members:
+        print("\nBelum ada data member yang terdaftar.")
+        return
+    table = PrettyTable()
+    table.field_names = ["ID Member", "Nama", "Umur", "Jenis Kelamin"]
+    table.align = "l"
+    for id_member, detail in data_members.items():
+        table.add_row([id_member, detail['nama'], detail['umur'], detail['jenis_kelamin']])
+    print("\n--- Data Member Gym ---")
+    print(table)
+
+def add_member():
+    """Fungsi untuk menambahkan member baru."""
+    print("\n--- Tambah Member Baru ---")
+    nama = input("Masukkan Nama: ").strip().title()
+    try:
+        umur = int(input("Masukkan Umur: "))
+    except ValueError:
+        print("\n[!] Input tidak valid. Umur harus berupa angka.")
+        return
+    jenis_kelamin = input("Masukkan Jenis Kelamin (Pria/Wanita): ").strip().capitalize()
+    if not all([nama, jenis_kelamin]):
+        print("\n[!] Semua kolom harus diisi."); return
+    new_id = generate_id()
+    members[new_id] = {'nama': nama, 'umur': umur, 'jenis_kelamin': jenis_kelamin}
+    print(f"\n[✓] Member '{nama}' dengan ID {new_id} berhasil ditambahkan!")
+
+def update_member():
+    """Fungsi untuk memperbarui data member."""
+    display_members()
+    if not members: return
+    try:
+        id_to_update = int(input("\nMasukkan ID Member yang ingin diupdate: "))
+    except ValueError:
+        print("\n[!] Input tidak valid. ID harus berupa angka."); return
+    
+    if id_to_update in members:
+        print("Kosongkan jika tidak ingin mengubah data.")
+        nama_baru = input(f"Nama baru ({members[id_to_update]['nama']}): ").strip().title()
+        umur_baru_str = input(f"Umur baru ({members[id_to_update]['umur']}): ").strip()
+        if nama_baru: members[id_to_update]['nama'] = nama_baru
+        if umur_baru_str: members[id_to_update]['umur'] = int(umur_baru_str)
+        print(f"\n[✓] Data member dengan ID {id_to_update} berhasil diperbarui.")
+    else:
+        print(f"\n[!] ID Member {id_to_update} tidak ditemukan.")
+
+def delete_member():
+    """Fungsi untuk menghapus member."""
+    display_members()
+    if not members: return
+    try:
+        id_to_delete = int(input("\nMasukkan ID Member yang ingin dihapus: "))
+    except ValueError:
+        print("\n[!] Input tidak valid. ID harus berupa angka."); return
+    
+    if id_to_delete in members:
+        nama = members[id_to_delete]['nama']
+        konfirmasi = input(f"Yakin ingin menghapus '{nama}' (y/n)? ").lower()
+        if konfirmasi == 'y':
+            del members[id_to_delete]
+            print(f"\n[✓] Member '{nama}' berhasil dihapus.")
+        else:
+            print("\nPenghapusan dibatalkan.")
+    else:
+        print(f"\n[!] ID Member {id_to_delete} tidak ditemukan.")
+
+def login():
+    """Fungsi login yang menggunakan maskpass."""
+    global logged_in_user
+    while True:
+        print("\n--- Sistem Pendataan Member Gym ---")
+        username = input("Username: ")
+        password = maskpass.askpass(prompt="Password: ", mask="*")
+        
+        if username in users and users[username]['password'] == password:
+            logged_in_user = {'username': username, 'role': users[username]['role']}
+            print(f"\n[✓] Login berhasil! Selamat datang, {username.capitalize()}.")
+            return True
+        else:
+            print("\n[!] Username atau password salah.")
+
+def menu_staff():
+    """Menu interaktif untuk pengguna dengan peran staff."""
+    while True:
+        menu_table = PrettyTable()
+        menu_table.title = "Menu Staff"
+        menu_table.field_names = ["Pilihan", "Deskripsi"]
+        menu_table.align = "l"
+        menu_table.add_row(["1", "Tampilkan Semua Member"])
+        menu_table.add_row(["2", "Tambah Member Baru"])
+        menu_table.add_row(["3", "Update Data Member"])
+        menu_table.add_row(["4", "Hapus Member"])
+        menu_table.add_row(["5", "Logout"])
+        print(f"\n{menu_table}")
+        
+        pilihan = input("Pilih menu: ")
+        if pilihan == '1': display_members()
+        elif pilihan == '2': add_member()
+        elif pilihan == '3': update_member()
+        elif pilihan == '4': delete_member()
+        elif pilihan == '5': print("\nAnda telah logout."); break
+        else: print("\n[!] Pilihan tidak valid.")
+
+def menu_member():
+    """Menu interaktif untuk pengguna dengan peran member."""
+    while True:
+        member_data = {}
+        for id_member, detail in members.items():
+            if detail['nama'].split()[0].lower() == logged_in_user['username']:
+                member_data[id_member] = detail
+        
+        print(f"\n--- Selamat Datang, {logged_in_user['username'].capitalize()} ---")
+        display_members(member_data)
+        
+        menu_table = PrettyTable()
+        menu_table.title = "Menu Member"
+        menu_table.field_names = ["Pilihan", "Deskripsi"]
+        menu_table.align = "l"
+        menu_table.add_row(["1", "Logout"])
+        print(menu_table)
+        
+        pilihan = input("Pilih menu: ")
+        if pilihan == '1': print("\nAnda telah logout."); break
+        else: print("\n[!] Pilihan tidak valid.")
+
+def main():
+    """Fungsi utama untuk menjalankan program."""
+    if login():
+        if logged_in_user['role'] == 'staff': menu_staff()
+        elif logged_in_user['role'] == 'member': menu_member()
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n\nprogram terhenti, JANGAN PENCET CRTL + C")
+        sys.exit(0)
+    except EOFError:
+        print("\n\nprogram terhenti, JANGAN PENCET CRTL + Z")
+        sys.exit(0)
