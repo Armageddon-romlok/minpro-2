@@ -1,4 +1,5 @@
-<img width="991" height="1057" alt="flow drawio" src="https://github.com/user-attachments/assets/1d2c4f4d-95dd-4009-8df6-df3654d9ebbd" />
+
+<img width="991" height="1058" alt="flow drawio (1)" src="https://github.com/user-attachments/assets/87832b8b-be8d-47b4-8dd9-88c6088c8174" />
 
 
 Saat program dijalankan, pengguna pertama-tama akan disambut oleh halaman login. Di sini, mereka harus memasuk![Uploading Untitled Diagram.drawio.png…]()
