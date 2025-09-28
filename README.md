@@ -1,5 +1,7 @@
-<img width="960" height="326" alt="flowchart_crud_login" src="https://github.com/user-attachments/assets/5e53182b-0841-4b1a-8e9e-3197897d265b" />
-Saat program dijalankan, pengguna pertama-tama akan disambut oleh halaman login. Di sini, mereka harus memasukkan kredensial untuk bisa masuk. Sistem kemudian akan mengidentifikasi peran mereka, apakah seorang Staf atau Member.
+<img width="991" height="1057" alt="Untitled Diagram drawio" src="https://github.com/user-attachments/assets/6a257e46-e760-48e2-aa02-1a58829f850d" />
+
+Saat program dijalankan, pengguna pertama-tama akan disambut oleh halaman login. Di sini, mereka harus memasuk![Uploading Untitled Diagram.drawio.png…]()
+kan kredensial untuk bisa masuk. Sistem kemudian akan mengidentifikasi peran mereka, apakah seorang Staf atau Member.
 
 Jika yang masuk adalah Staf, mereka akan dibawa ke menu utama dengan kontrol penuh. Mereka bisa melihat daftar seluruh member dalam sebuah tabel, mendaftarkan member baru, memperbarui informasi member yang sudah ada, atau bahkan menghapusnya dari sistem.
 
