@@ -1,4 +1,5 @@
-<img width="991" height="1057" alt="Untitled Diagram drawio" src="https://github.com/user-attachments/assets/6a257e46-e760-48e2-aa02-1a58829f850d" />
+<img width="991" height="1057" alt="flow drawio" src="https://github.com/user-attachments/assets/1d2c4f4d-95dd-4009-8df6-df3654d9ebbd" />
+
 
 Saat program dijalankan, pengguna pertama-tama akan disambut oleh halaman login. Di sini, mereka harus memasuk![Uploading Untitled Diagram.drawio.png…]()
 kan kredensial untuk bisa masuk. Sistem kemudian akan mengidentifikasi peran mereka, apakah seorang Staf atau Member.
